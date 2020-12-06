@@ -79,6 +79,8 @@ def main():
             while not valid:
                 try:
                     type(int(pos))
+                    if (int(pos) > 9) or (int(pos) < 1):
+                        raise Exception  
                     valid = True
                 except:
                     print("Um yeah, try something else")
