@@ -7,6 +7,9 @@ class TicTacToe:
     def get_grid(self):
         return self.grid
 
+    def reset_grid(self):
+        self.grid = [[" " for i in range(3)] for j in range(3)]
+
     def replace(self, num, symbol):
         if num == "1":
             self.grid[0][0] = symbol
@@ -35,7 +38,8 @@ class TicTacToe:
         e = ['  ' + i + '  ' for i in self.grid[2]]
         print("\n".join(map("|".join, (a, c, b, a, d, b, a, e, a))))
 
-# This snippet is made by Boris #######################################################
+
+# This snipped is made by Boris
 # https://stackoverflow.com/questions/39922967/python-determine-tic-tac-toe-winner
 def _lines(board):
     yield from board  # the rows
@@ -51,7 +55,6 @@ def who_won(board):
         if len(set(line)) == 1 and line[0] is not None:
             return line[0]
     return None  # if we got this far, there's no winner
-######################################################################################
 
 class Player:
     def __init__(self, name):
@@ -77,10 +80,11 @@ def main():
             
             valid  = False
             while not valid:
+                print("YEEES")
                 try:
                     type(int(pos))
                     if (int(pos) > 9) or (int(pos) < 1):
-                        raise Exception  
+                      raise Exception                      
                     valid = True
                 except:
                     print("Um yeah, try something else")
@@ -111,6 +115,11 @@ def main():
                 game_bool = False
         repeat = input("Do you want to play again? (Yes, No)")
         if repeat.lower() == "yes":
+            # Clear Game
+            game_bool = True
+            Game.reset_grid()         
+            P1.positions.clear()
+            P2.positions.clear()
             continue
         elif repeat.lower() == "no":
             break
@@ -121,3 +130,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
