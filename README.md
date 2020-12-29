@@ -6,3 +6,8 @@ Check the demo over [here](https://repl.it/@FrenzyBoi/tictactoe)!
 
 This is part of my collection of trinkets, visit my [website](https://frenzyexists.github.io/Webfolio_2/) for more!!!
 
+==================================
+IN CONSTRUCTION
+==================================
+
+gui_stuff.py file is ready to use, gui.py currently in development
