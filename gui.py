@@ -89,6 +89,10 @@ def menu():
             if is_clicking:
                 exit()
 
+        if option_game.hover(mouse_x, mouse_y):
+            if is_clicking:
+                options()
+
         # Check all events
         for ev in event.get():
             if ev.type == QUIT:
@@ -109,26 +113,101 @@ def menu():
         display.update()
         CLOCK.tick(30)
 
-
 # options.
 def options():
-    pass
+    running:bool = True
+
+    fonty=font.get_default_font()
+
+    music_slider = Slider(100, 100, 100)
+    sfx_slider = Slider(100, 150, 100)
+    fullscreen_button = Button(100, 30, 200, 200, text="Fullscreen")
+    return_button = Button(140, 30, 400, 400, text="Back to Menu")
+
+    is_clicking = False
+
+    while running:
+        mouse_x, mouse_y = mouse.get_pos()
+        
+        # Background, game is meant to be simple, don't judge me
+        screen.fill((0, 0, 0))
+
+        if return_button.hover(mouse_x, mouse_y):
+            if is_clicking:
+                running = False
+                break
+
+        # Event Loop
+        for ev in event.get():
+            if ev.type == QUIT:
+                exit()
+            if ev.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    exit()
+            if ev.type == MOUSEBUTTONDOWN:
+                if ev.button == 1:
+                    is_clicking = True
+                
+            else: is_clicking = False
+
+            music_slider.get_input(event)
+            sfx_slider.get_input(event)
+        
+        # Draw text
+        # screen.blit(font.Font(fonty, 24).render("Pause ", 0, (22,67,99)), (132, 230))
+        screen.blit(font.Font(fonty, 24).render("Options", 0, (255, 240, 230)), ( int(WINDOWSIZE[0]/2 ), 20))
+        screen.blit(font.Font(fonty, 24).render("Music", 0, (255, 240, 230)), (40, 70))
+        screen.blit(font.Font(fonty, 24).render("Sound Effects", 0, (255, 240, 230)), (40, 110))
+
+        # Draw Widgets
+        music_slider.draw(screen)
+        sfx_slider.draw(screen)
+        return_button.draw(screen)
+        fullscreen_button.draw(screen)
+
+
+
+        main_screen.blit(screen, (0,0))
+        
+        display.update()
+        CLOCK.tick(30)
 
 # Select Player (just imagine cpu VS cpu)
 def select_player():
-    pass
+    running:bool = True
 
 
 # Pause menu thingy
 def pause():
-    pass
+    option_game = Button(120, 40, 40, 250, "Options",  text_color=COLORS["text"])
+    back_to_menu_game = Button(120, 40, 40, 420, "Back to Menu",  text_color=COLORS["text"])
+
+
+    fonty=font.get_default_font()
+
+    running:bool = True
+    while running:
+        for ev in event.get():
+            if ev.type == QUIT:
+                exit()
+            if ev.type == KEYDOWN:
+                if ev.key == K_SPACE:
+                    running = False
+                    break
+
+        screen.blit(font.Font(fonty, 24).render("Pause ", 0, (22,67,99)), (132, 230))
+        main_screen.blit(screen, (0,0))
+        display.update()
+        CLOCK.tick(30)
 
 # game
 def main():
     running:bool = True
 
     screen.fill(COLORS["background"])
-    test = Grid(100, 70, 100, 400, "3x10")
+    test = Grid(100, 70, 300, 300, "3x3")
+
+    fonty=font.get_default_font()    
 
     while running:
         mouse_x, mouse_y = mouse.get_pos()
@@ -140,6 +219,9 @@ def main():
             if ev.type == KEYDOWN:
                 if ev.key == K_ESCAPE:
                     exit()
+                if ev.key == K_SPACE:
+                    pause()
+ 
             if ev.type == MOUSEBUTTONDOWN:
                 if ev.button == 1:
                     is_clicking = True
@@ -147,6 +229,8 @@ def main():
                 is_clicking = False
 
         test.draw(screen)
+
+        screen.blit(font.Font(fonty, 60).render("X", 0, (22,67,99)), (test.x+30, test.y+30))
 
         main_screen.blit(screen, (0, 0))
         display.update()

@@ -175,7 +175,7 @@ class Slider:
 
 
 class Grid(pygame.sprite.Sprite):
-    def __init__(self,x_pos:float, y_pos:float, width:float, height:float, size:str, color:tuple=(255,255,255), fill_color:tuple=(0,0,0), round_corners=False, inner_grid_h_color=(12,45,90), inner_grid_v_color=(122,45,90), outer_grid_color=(44,44,44) ):
+    def __init__(self,x_pos:float, y_pos:float, width:float, height:float, size:str, color:tuple=(255,255,255), fill_color:tuple=(0,0,0), round_corners=False, inner_grid_h_color=(12,45,90), inner_grid_v_color=(122,45,90), outer_grid=True, outer_grid_color=(44,44,44) ):
         pygame.sprite.Sprite.__init__(self)
         self.x = x_pos
         self.y = y_pos
@@ -184,6 +184,7 @@ class Grid(pygame.sprite.Sprite):
 
         self.inner_grid_h_color = inner_grid_h_color
         self.inner_grid_v_color = inner_grid_v_color
+        self.outer_grid = outer_grid
         self.outer_grid_color = outer_grid_color
 
         self.dx, self.dy = [int(i) for i in size.lower().split("x")]
@@ -230,10 +231,11 @@ class Grid(pygame.sprite.Sprite):
             # Ending Point
             (self.x + 0, self.y + (vertical_cellsize*x)), 3)
 
-        if self.corners == True:
-            pygame.draw.rect(surface, self.outer_grid_color, rectout, 10, self.border_radius)
-        else:
-            pygame.draw.rect(surface, self.outer_grid_color, rectout, 10, 1)
+        if self.outer_grid == True:
+            if self.corners == True:
+                pygame.draw.rect(surface, self.outer_grid_color, rectout, 10, self.border_radius)
+            else:
+                pygame.draw.rect(surface, self.outer_grid_color, rectout, 10, 1)
 
             
 # //// Dot Object ////////////////////////////////////////////////////////////////////////////////////////////////////////
