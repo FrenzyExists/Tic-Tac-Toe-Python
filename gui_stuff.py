@@ -1,4 +1,11 @@
+#!/usr/bin/env python3
+
 # Pygame gui stuff
+#
+# //// Hehe ////////////////////////////////////////////////////////////////////////////////////////////////////////     
+__author__ = "Frenzy"
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+
 """
 I've used these things at a few trinkets of mine, and I'm not willing to re-invent the damn wheel again
 """
@@ -168,12 +175,70 @@ class Slider:
 
 
 class Grid(pygame.sprite.Sprite):
-    def __init__(self,x_pos, y_pos:float, width:float, height:float, size:str):
-        pass
+    def __init__(self,x_pos:float, y_pos:float, width:float, height:float, size:str, color:tuple=(255,255,255), fill_color:tuple=(0,0,0), round_corners=False, inner_grid_h_color=(12,45,90), inner_grid_v_color=(122,45,90), outer_grid_color=(44,44,44) ):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = x_pos
+        self.y = y_pos
+        self.w = width
+        self.h = height
 
+        self.inner_grid_h_color = inner_grid_h_color
+        self.inner_grid_v_color = inner_grid_v_color
+        self.outer_grid_color = outer_grid_color
+
+        self.dx, self.dy = [int(i) for i in size.lower().split("x")]
+
+        self.color = color
+        self.fill = fill_color
+
+        self.corners = round_corners
+
+        self.image = pygame.Surface((self.w, self.h))
+        self.image.fill(self.color)
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = self.x, self.y
+        self.border_radius = int( ((self.w+self.h)/2)/12 )
+
+    def draw(self, surface: pygame.Surface):
+
+        # Fill
+        pygame.draw.rect(surface, self.color, self.rect)
+
+        rectout = pygame.Surface((self.w+20, self.h+20)).get_rect()
+        rectout.x, rectout.y = self.x-10, self.y-10
+
+        horizontal_cellsize = (self.w)/self.dx
+        vertical_cellsize = (self.h)/self.dy
+
+        for x in range(1, self.dx):  
+        # VERTICAL DIVISION
+        
+            pygame.draw.line(
+            surface, self.inner_grid_v_color,
+            # Beginning Point
+            (self.x + (horizontal_cellsize*x), self.y + 0 ),
+            # Ending Point
+            (self.x + horizontal_cellsize*x, self.y+self.h - 0 ), 3)
+
+        for x in range(1, self.dy):
+        # HORITZONTAL DIVISION
+
+            pygame.draw.line(
+            surface, self.inner_grid_h_color,
+            # Beginning Point
+            (self.x + self.w - 0, self.y + (vertical_cellsize*x)),
+            # Ending Point
+            (self.x + 0, self.y + (vertical_cellsize*x)), 3)
+
+        if self.corners == True:
+            pygame.draw.rect(surface, self.outer_grid_color, rectout, 10, self.border_radius)
+        else:
+            pygame.draw.rect(surface, self.outer_grid_color, rectout, 10, 1)
+
+            
 # //// Dot Object ////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Dot(pygame.sprite.Sprite):
-    def __init__(self, surface, x, y, width, height, color=(255,255,255), dot_color=(0,0,0)):
+    def __init__(self, surface, x:float, y:float, width:float, height:float, color:tuple=(255,255,255), dot_color:tuple=(0,0,0)):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
@@ -199,7 +264,7 @@ class Dot(pygame.sprite.Sprite):
         }
         self.dot_r = int(self.w/10)
 
-    def draw(self, position_in_rect="default"):
+    def draw(self, position_in_rect:str="default"):
         pygame.draw.rect(self.surface,  self.color, self.rect)
         if position_in_rect == "default":
             pygame.draw.circle(self.surface, self.dot_color, tuple(self.pos_dict[s] for s in "center_x-center_y".split("-")), self.dot_r)
@@ -217,4 +282,3 @@ def fade(size, surface, fade_color=(0,0,0), delay=5):
         surface.blit(fade_surface, (0, 0))
         pygame.display.update()
         pygame.time.delay(delay)
-
